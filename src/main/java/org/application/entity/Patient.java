@@ -26,9 +26,9 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Addresses> addressList;
 
-    @ManyToOne
-    @JoinColumn(name = "prescriber_id")
-    private Prescriber prescriber;
+    @OneToMany(mappedBy="patient",cascade=CascadeType.ALL)
+    private List<Prescriber> prescriberList;
+
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Prescriptions> prescriptionList;
@@ -87,6 +87,8 @@ public class Patient {
         this.clinicalList = clinicalList;
     }
 
+
+
     public List<Insurance> getInsuranceList() {
         return insuranceList;
     }
@@ -124,13 +126,7 @@ public class Patient {
         return patient_id;
     }
 
-    public Prescriber getPrescriber() {
-        return prescriber;
-    }
 
-    public void setPrescriber(Prescriber prescriber) {
-        this.prescriber = prescriber;
-    }
     public List<Contact> getContactList() {
         return contactList;
     }
@@ -139,5 +135,11 @@ public class Patient {
         this.contactList = contactList;
     }
 
+    public List<Prescriber> getPrescriberList() {
+        return prescriberList;
+    }
 
+    public void setPrescriberList(List<Prescriber> prescriberList) {
+        this.prescriberList = prescriberList;
+    }
 }

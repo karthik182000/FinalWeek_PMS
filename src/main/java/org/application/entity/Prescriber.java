@@ -12,6 +12,30 @@ public class Prescriber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prescriber_id;
 
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @Column(name = "npi_number")
+    private Long npiNumber;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    public Prescriber() {
+    }
+
+    // Constructors with required fields
+    public Prescriber(Long npiNumber, String firstName, String lastName) {
+        this.npiNumber = npiNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+
     public Long getPrescriber_id() {
         return prescriber_id;
     }
@@ -19,15 +43,6 @@ public class Prescriber {
     public void setPrescriber_id(Long prescriber_id) {
         this.prescriber_id = prescriber_id;
     }
-
-    public List<Patient> getPatients() {
-        return patients;
-    }
-
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
-    }
-
     public Long getNpiNumber() {
         return npiNumber;
     }
@@ -52,28 +67,12 @@ public class Prescriber {
         this.lastName = lastName;
     }
 
-    @OneToMany(mappedBy = "prescriber", cascade = CascadeType.ALL)
-    private List<Patient> patients;
-
-    @Column(name = "npi_number")
-    private Long npiNumber;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-
-
-    public Prescriber() {
+    public Patient getPatient() {
+        return patient;
     }
 
-    // Constructors with required fields
-    public Prescriber(Long npiNumber, String firstName, String lastName) {
-        this.npiNumber = npiNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
 

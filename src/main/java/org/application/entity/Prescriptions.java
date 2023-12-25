@@ -8,6 +8,10 @@ public class Prescriptions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prescriptions_id;
 
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
     @Column(name = "ndc")
     private Long ndc;
 
@@ -22,9 +26,6 @@ public class Prescriptions {
     private Integer supply;
     private Integer refills;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
 
     public Prescriptions() {
     }

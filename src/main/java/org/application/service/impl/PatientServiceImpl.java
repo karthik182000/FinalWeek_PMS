@@ -1,5 +1,6 @@
 package org.application.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.application.entity.Patient;
 import org.application.repository.PatientRepository;
 import org.application.service.PatientService;
@@ -33,22 +34,63 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Patient updatePatient(Long patient_id, Patient updatedPatient) {
-        // Implement logic to update a patient
         Patient existingPatient = getPatientById(patient_id);
 
         // Update the existing patient entity with new details
-
         existingPatient.setFirstName(updatedPatient.getFirstName());
         existingPatient.setLastName(updatedPatient.getLastName());
         existingPatient.setDateOfBirth(updatedPatient.getDateOfBirth());
         existingPatient.setGender(updatedPatient.getGender());
-        existingPatient.setContactList(updatedPatient.getContactList());
-        existingPatient.setAddressList(updatedPatient.getAddressList());
-        existingPatient.setClinicalList(updatedPatient.getClinicalList());
-        existingPatient.setPrescriber(updatedPatient.getPrescriber());
-        existingPatient.setPrescriptionList(updatedPatient.getPrescriptionList());
-        existingPatient.setInsuranceList(updatedPatient.getInsuranceList());
+
+        // Update Contact List
+        if (updatedPatient.getContactList() != null) {
+            existingPatient.getContactList().clear();
+            existingPatient.getContactList().addAll(updatedPatient.getContactList());
+            existingPatient.getContactList().forEach(contact -> contact.setPatient(existingPatient));
+        }
+
+        // Update Address List
+        if (updatedPatient.getAddressList() != null) {
+            existingPatient.getAddressList().clear();
+            existingPatient.getAddressList().addAll(updatedPatient.getAddressList());
+            existingPatient.getAddressList().forEach(address -> address.setPatient(existingPatient));
+        }
+
+        // Update Clinical List
+        if (updatedPatient.getClinicalList() != null) {
+            existingPatient.getClinicalList().clear();
+            existingPatient.getClinicalList().addAll(updatedPatient.getClinicalList());
+            existingPatient.getClinicalList().forEach(clinical -> {
+                clinical.setPatient(existingPatient);
+                if (clinical.getAllergies() != null) {
+                    clinical.getAllergies().setClinical(clinical);
+                }
+            });
+        }
+
+        // Update Prescriber
+        if (updatedPatient.getPrescriberList() != null) {
+            existingPatient.getPrescriberList().clear();
+            existingPatient.getPrescriberList().addAll(updatedPatient.getPrescriberList());
+            existingPatient.getPrescriberList().forEach(prescriber-> prescriber.setPatient(existingPatient));
+        }
+
+        // Update Prescription List
+        if (updatedPatient.getPrescriptionList() != null) {
+            existingPatient.getPrescriptionList().clear();
+            existingPatient.getPrescriptionList().addAll(updatedPatient.getPrescriptionList());
+            existingPatient.getPrescriptionList().forEach(prescription -> prescription.setPatient(existingPatient));
+        }
+
+        // Update Insurance List
+        if (updatedPatient.getInsuranceList() != null) {
+            existingPatient.getInsuranceList().clear();
+            existingPatient.getInsuranceList().addAll(updatedPatient.getInsuranceList());
+            existingPatient.getInsuranceList().forEach(insurance -> insurance.setPatient(existingPatient));
+        }
+
         return patientRepository.save(existingPatient);
     }
 
